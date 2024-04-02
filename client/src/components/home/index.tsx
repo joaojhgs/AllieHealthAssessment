@@ -17,6 +17,21 @@ const Home = () => {
     `${process.env.REACT_APP_SERVER_BASE_URL}/users`,
   );
 
+  const onSubmitModal = (result?: IUser) => {
+    setIsCreateUserOpen(!isCreateUserOpen);
+    if (result)
+      setUsersData((users) => {
+        if (!users) return [result];
+
+        const index = users?.findIndex((user) => user.id === result.id);
+        if (index >= 0) {
+          users[index] = result;
+          return users;
+        }
+        return [...users, result];
+      });
+  };
+
   useEffect(() => {
     if (data) {
       setUsersData(data.users);
@@ -60,11 +75,7 @@ const Home = () => {
       <UsersTable users={usersData} setEditingUser={setIsCreateUserOpen} />
       <CreateUpdateUserModal
         openWithUser={isCreateUserOpen}
-        handleSubmit={(result?: IUser) => {
-          setIsCreateUserOpen(!isCreateUserOpen);
-          if (result)
-            setUsersData((users) => (users ? [...users, result] : [result]));
-        }}
+        handleSubmit={onSubmitModal}
         handleClose={() => {
           setIsCreateUserOpen(!isCreateUserOpen);
         }}

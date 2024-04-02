@@ -8,7 +8,10 @@ const router = Router();
 const upload = multer({ dest: os.tmpdir() });
 
 const usersParameterMap: Record<string, string> = {
-  firstName: 'first_name', lastName: 'last_name', email: 'email', birthDate: 'birth_date'
+  firstName: "first_name",
+  lastName: "last_name",
+  email: "email",
+  birthDate: "birth_date",
 };
 
 router.get("/users", (req: Request, res: Response) => {
@@ -45,33 +48,28 @@ router.post("/users", (req: Request, res: Response) => {
 });
 
 router.put("/users/:userId", (req: Request, res: Response) => {
-
-  if (
-    Object.keys(req.body).length < 1
-  ) {
+  if (Object.keys(req.body).length < 1) {
     res.sendStatus(400);
     return;
   }
 
-  Object.keys(req.body).forEach(key => {
+  Object.keys(req.body).forEach((key) => {
     if (!usersParameterMap[key]) {
       res.sendStatus(400);
       return;
     }
-  })
+  });
 
-  let updateQuery = `UPDATE users \nSET `
+  let updateQuery = `UPDATE users \nSET `;
   Object.entries(req.body).forEach(([key, value], index) => {
-    updateQuery = updateQuery.concat(`${usersParameterMap[key]} = '${value}'${index !== Object.entries(req.body).length - 1 ? ', ' : ''} `)
-  })
+    updateQuery = updateQuery.concat(
+      `${usersParameterMap[key]} = '${value}'${index !== Object.entries(req.body).length - 1 ? ", " : ""} `,
+    );
+  });
   updateQuery = updateQuery.concat(`\nWHERE id = ${req.params.userId};`);
-  const getQuery = `\nSELECT id, first_name, last_name, email, birth_date FROM users WHERE id = ${req.params.userId};`
+  const getQuery = `\nSELECT id, first_name, last_name, email, birth_date FROM users WHERE id = ${req.params.userId};`;
 
-  db
-    .prepare(
-      updateQuery,
-    )
-    .run();
+  db.prepare(updateQuery).run();
   const user = db.prepare(getQuery).get();
 
   res.json(user);

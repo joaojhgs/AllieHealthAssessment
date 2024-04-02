@@ -92,7 +92,7 @@ const CreateUpdateForm = ({ onSubmit, user }: Props) => {
             type="submit"
             disabled={loadingCreate || loadingUpdate}
           >
-            Create User
+            {user ? "Update" : "Create"} User
           </Button>
         </Box>
       </form>

@@ -8,7 +8,11 @@ type Props = {
   handleSubmit: (result?: IUser) => void;
 };
 
-const CreateUpdateUserModal = ({ openWithUser, handleClose, handleSubmit }: Props) => {
+const CreateUpdateUserModal = ({
+  openWithUser,
+  handleClose,
+  handleSubmit,
+}: Props) => {
   return (
     <Modal open={!!openWithUser} onClose={handleClose}>
       <Box
@@ -24,7 +28,7 @@ const CreateUpdateUserModal = ({ openWithUser, handleClose, handleSubmit }: Prop
         }}
       >
         <CreateUpdateForm
-          onSubmit={handleClose}
+          onSubmit={handleSubmit}
           user={typeof openWithUser === "boolean" ? undefined : openWithUser}
         />
       </Box>
