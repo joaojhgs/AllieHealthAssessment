@@ -3,14 +3,23 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import useAxios from "axios-hooks";
 import { Controller, FieldValues, useForm } from "react-hook-form";
 import { IUser } from "../../interfaces";
+import dayjs from "dayjs";
 
 type Props = {
+  user?: IUser;
   onSubmit: (result?: IUser) => void;
 };
 
-const CreateForm = ({ onSubmit }: Props) => {
-  const { register, handleSubmit, control } = useForm();
-  const [{ loading, error }, executePost] = useAxios(
+const CreateUpdateForm = ({ onSubmit, user }: Props) => {
+  const { register, handleSubmit, control } = useForm({
+    defaultValues: {
+      firstName: user?.first_name,
+      lastName: user?.last_name,
+      email: user?.email,
+      birthDate: dayjs(user?.birth_date),
+    },
+  });
+  const [{ loading: loadingCreate, error: errorCreate }, createPost] = useAxios(
     {
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/users`,
       method: "POST",
@@ -18,8 +27,20 @@ const CreateForm = ({ onSubmit }: Props) => {
     { manual: true },
   );
 
+  const [{ loading: loadingUpdate, error: errorUpdate }, updatePut] = useAxios(
+    {
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/users/${user?.id}`,
+      method: "PUT",
+    },
+    { manual: true },
+  );
+
   const onFormSubmit = async (data: FieldValues) => {
-    onSubmit((await executePost({ data })).data);
+    if (user && user?.id) {
+      onSubmit((await updatePut({ data })).data);
+    } else {
+      onSubmit((await createPost({ data })).data);
+    }
   };
 
   return (
@@ -32,7 +53,7 @@ const CreateForm = ({ onSubmit }: Props) => {
             gap: 1,
           }}
         >
-          {error && (
+          {(errorUpdate || errorCreate) && (
             <Alert severity="error">
               Sorry - there was an error creating the user
             </Alert>
@@ -55,9 +76,10 @@ const CreateForm = ({ onSubmit }: Props) => {
           <Controller
             name="birthDate"
             control={control}
-            render={({ field: { onChange, ...restField } }) => (
+            render={({ field: { onChange, value, ...restField } }) => (
               <DatePicker
                 label="Request Date"
+                defaultValue={value}
                 onChange={(event) => {
                   onChange(event);
                 }}
@@ -65,8 +87,12 @@ const CreateForm = ({ onSubmit }: Props) => {
               />
             )}
           />
-          <Button variant="contained" type="submit" disabled={loading}>
-            Create User
+          <Button
+            variant="contained"
+            type="submit"
+            disabled={loadingCreate || loadingUpdate}
+          >
+            {user ? "Update" : "Create"} User
           </Button>
         </Box>
       </form>
@@ -74,4 +100,4 @@ const CreateForm = ({ onSubmit }: Props) => {
   );
 };
 
-export default CreateForm;
+export default CreateUpdateForm;

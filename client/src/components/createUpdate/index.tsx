@@ -1,17 +1,20 @@
 import { Box, Modal } from "@mui/material";
-import React from "react";
-import CreateForm from "./CreateForm";
+import CreateUpdateForm from "./CreateUpdateForm";
 import { IUser } from "../../interfaces";
 
 type Props = {
-  open: boolean;
+  openWithUser: boolean | IUser;
   handleClose: () => void;
   handleSubmit: (result?: IUser) => void;
 };
 
-const CreateUserModal = ({ open, handleClose, handleSubmit }: Props) => {
+const CreateUpdateUserModal = ({
+  openWithUser,
+  handleClose,
+  handleSubmit,
+}: Props) => {
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal open={!!openWithUser} onClose={handleClose}>
       <Box
         sx={{
           position: "absolute",
@@ -24,10 +27,13 @@ const CreateUserModal = ({ open, handleClose, handleSubmit }: Props) => {
           p: 4,
         }}
       >
-        <CreateForm onSubmit={handleSubmit} />
+        <CreateUpdateForm
+          onSubmit={handleSubmit}
+          user={typeof openWithUser === "boolean" ? undefined : openWithUser}
+        />
       </Box>
     </Modal>
   );
 };
 
-export default CreateUserModal;
+export default CreateUpdateUserModal;
