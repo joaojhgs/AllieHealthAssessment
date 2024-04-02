@@ -18,9 +18,10 @@ const TableHeaderCell = (props: Record<any, any>) => (
 
 type Props = {
   users?: IUser[];
+  setEditingUser: (user: IUser) => void;
 };
 
-const UsersTable = ({ users }: Props) => (
+const UsersTable = ({ users, setEditingUser }: Props) => (
   <TableContainer component={Paper}>
     <Table aria-label="simple table">
       <TableHead>
@@ -35,6 +36,7 @@ const UsersTable = ({ users }: Props) => (
           <TableRow
             key={user.id}
             sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            onClick={() => setEditingUser(user)}
           >
             <TableCell component="th" scope="row">
               {`${user.first_name} ${user.last_name}`}

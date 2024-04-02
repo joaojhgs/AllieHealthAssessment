@@ -3,12 +3,14 @@ import useAxios from "axios-hooks";
 import { useEffect, useState } from "react";
 import UsersTable from "./UsersTable";
 import MessageContainer from "./MessageContainer";
-import CreateUserModal from "../create";
+import CreateUpdateUserModal from "../createUpdate";
 import UploadInput from "./UploadInput";
 import { IUser } from "../../interfaces";
 
 const Home = () => {
-  const [isCreateUserOpen, setIsCreateUserOpen] = useState(false);
+  const [isCreateUserOpen, setIsCreateUserOpen] = useState<IUser | boolean>(
+    false,
+  );
   const [usersData, setUsersData] = useState<IUser[]>();
 
   const [{ data, loading, error }, refetch] = useAxios(
@@ -55,9 +57,9 @@ const Home = () => {
           Create User
         </Button>
       </Box>
-      <UsersTable users={usersData} />
-      <CreateUserModal
-        open={isCreateUserOpen}
+      <UsersTable users={usersData} setEditingUser={setIsCreateUserOpen} />
+      <CreateUpdateUserModal
+        openWithUser={isCreateUserOpen}
         handleClose={(result: IUser) => {
           setIsCreateUserOpen(!isCreateUserOpen);
           setUsersData((users) => (users ? [...users, result] : [result]));
