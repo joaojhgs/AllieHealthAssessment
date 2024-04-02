@@ -1,5 +1,5 @@
 import { Alert, Box, Button, TextField } from "@mui/material";
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import useAxios from "axios-hooks";
 import { Controller, FieldValues, useForm } from "react-hook-form";
 import { IUser } from "../../interfaces";
@@ -47,18 +47,23 @@ const CreateForm = ({ onSubmit }: Props) => {
             variant="outlined"
             {...register("lastName", { required: true })}
           />
-          <TextField label="Email" variant="outlined" {...register("email", { required: true })} />
+          <TextField
+            label="Email"
+            variant="outlined"
+            {...register("email", { required: true })}
+          />
           <Controller
             name="birthDate"
             control={control}
-            render={
-                ({ field: { onChange, ...restField } }) =>
-                    <DatePicker
-                        label="Request Date"
-                        onChange={(event) => {  onChange(event); }}
-                        {...restField}
-                    />
-              }
+            render={({ field: { onChange, ...restField } }) => (
+              <DatePicker
+                label="Request Date"
+                onChange={(event) => {
+                  onChange(event);
+                }}
+                {...restField}
+              />
+            )}
           />
           <Button variant="contained" type="submit" disabled={loading}>
             Create User

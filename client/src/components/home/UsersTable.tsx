@@ -39,7 +39,11 @@ const UsersTable = ({ users }: Props) => (
             <TableCell component="th" scope="row">
               {`${user.first_name} ${user.last_name}`}
             </TableCell>
-            <TableCell>{user.birth_date ? new Date(user.birth_date).toDateString() : null}</TableCell>
+            <TableCell>
+              {user.birth_date
+                ? new Date(user.birth_date).toDateString()
+                : null}
+            </TableCell>
             <TableCell align="right">{user.email}</TableCell>
           </TableRow>
         ))}

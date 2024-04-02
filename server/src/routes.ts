@@ -16,7 +16,12 @@ router.get("/users", (req: Request, res: Response) => {
 });
 
 router.post("/users", (req: Request, res: Response) => {
-  if (!req.body.firstName || !req.body.lastName || !req.body.email || !req.body.birthDate) {
+  if (
+    !req.body.firstName ||
+    !req.body.lastName ||
+    !req.body.email ||
+    !req.body.birthDate
+  ) {
     res.sendStatus(400);
     return;
   }
