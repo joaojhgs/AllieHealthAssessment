@@ -60,19 +60,19 @@ router.put("/users/:userId", (req: Request, res: Response) => {
     }
   })
 
-  let query = `UPDATE users`
-  Object.keys(req.body).forEach(key => {
-    query = query.concat(`\nSET ${usersParameterMap[key]} = @${key}`)
+  let updateQuery = `UPDATE users \nSET `
+  Object.entries(req.body).forEach(([key, value], index) => {
+    updateQuery = updateQuery.concat(`${usersParameterMap[key]} = '${value}'${index !== Object.entries(req.body).length - 1 ? ', ' : ''} `)
   })
-  query = query.concat(`\nWHERE id = ${req.params.userId}`);
-  query = query.concat(`\nRETURNING id, first_name, last_name, email, birth_date`);
+  updateQuery = updateQuery.concat(`\nWHERE id = ${req.params.userId};`);
+  const getQuery = `\nSELECT id, first_name, last_name, email, birth_date FROM users WHERE id = ${req.params.userId};`
 
-
-  const user = db
+  db
     .prepare(
-      query,
+      updateQuery,
     )
-    .get(req.body);
+    .run();
+  const user = db.prepare(getQuery).get();
 
   res.json(user);
 });
