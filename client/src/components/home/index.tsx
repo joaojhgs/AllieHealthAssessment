@@ -60,9 +60,13 @@ const Home = () => {
       <UsersTable users={usersData} setEditingUser={setIsCreateUserOpen} />
       <CreateUpdateUserModal
         openWithUser={isCreateUserOpen}
-        handleClose={(result: IUser) => {
+        handleSubmit={(result?: IUser) => {
           setIsCreateUserOpen(!isCreateUserOpen);
-          setUsersData((users) => (users ? [...users, result] : [result]));
+          if (result)
+            setUsersData((users) => (users ? [...users, result] : [result]));
+        }}
+        handleClose={() => {
+          setIsCreateUserOpen(!isCreateUserOpen);
         }}
       />
     </>

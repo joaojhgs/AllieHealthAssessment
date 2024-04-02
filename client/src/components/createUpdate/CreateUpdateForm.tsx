@@ -6,8 +6,8 @@ import { IUser } from "../../interfaces";
 import dayjs from "dayjs";
 
 type Props = {
-  onSubmit: (result: IUser) => void;
   user?: IUser;
+  onSubmit: (result?: IUser) => void;
 };
 
 const CreateUpdateForm = ({ onSubmit, user }: Props) => {

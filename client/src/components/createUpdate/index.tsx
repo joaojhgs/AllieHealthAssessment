@@ -4,10 +4,11 @@ import { IUser } from "../../interfaces";
 
 type Props = {
   openWithUser: boolean | IUser;
-  handleClose: (result: IUser) => void;
+  handleClose: () => void;
+  handleSubmit: (result?: IUser) => void;
 };
 
-const CreateUpdateUserModal = ({ openWithUser, handleClose }: Props) => {
+const CreateUpdateUserModal = ({ openWithUser, handleClose, handleSubmit }: Props) => {
   return (
     <Modal open={!!openWithUser} onClose={handleClose}>
       <Box
