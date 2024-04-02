@@ -6,6 +6,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { IUser } from "../../interfaces";
+import EditIcon from "@mui/icons-material/Edit";
 
 const TableHeaderCell = (props: Record<any, any>) => (
   <TableCell
@@ -28,7 +29,8 @@ const UsersTable = ({ users, setEditingUser }: Props) => (
         <TableRow>
           <TableHeaderCell>Name</TableHeaderCell>
           <TableHeaderCell>Birth date</TableHeaderCell>
-          <TableHeaderCell align="right">Email</TableHeaderCell>
+          <TableHeaderCell>Email</TableHeaderCell>
+          <TableHeaderCell align="right">Actions</TableHeaderCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -36,7 +38,6 @@ const UsersTable = ({ users, setEditingUser }: Props) => (
           <TableRow
             key={user.id}
             sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            onClick={() => setEditingUser(user)}
           >
             <TableCell component="th" scope="row">
               {`${user.first_name} ${user.last_name}`}
@@ -46,7 +47,13 @@ const UsersTable = ({ users, setEditingUser }: Props) => (
                 ? new Date(user.birth_date).toDateString()
                 : null}
             </TableCell>
-            <TableCell align="right">{user.email}</TableCell>
+            <TableCell>{user.email}</TableCell>
+            <TableCell align="right">
+              <EditIcon
+                style={{ cursor: "pointer" }}
+                onClick={() => setEditingUser(user)}
+              />
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
