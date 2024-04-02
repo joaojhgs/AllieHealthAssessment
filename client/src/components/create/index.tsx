@@ -1,13 +1,15 @@
 import { Box, Modal } from "@mui/material";
 import React from "react";
 import CreateForm from "./CreateForm";
+import { IUser } from "../../interfaces";
 
 type Props = {
   open: boolean;
   handleClose: () => void;
+  handleSubmit: (result?: IUser) => void;
 };
 
-const CreateUserModal = ({ open, handleClose }: Props) => {
+const CreateUserModal = ({ open, handleClose, handleSubmit }: Props) => {
   return (
     <Modal open={open} onClose={handleClose}>
       <Box
@@ -22,7 +24,7 @@ const CreateUserModal = ({ open, handleClose }: Props) => {
           p: 4,
         }}
       >
-        <CreateForm onSubmit={handleClose} />
+        <CreateForm onSubmit={handleSubmit} />
       </Box>
     </Modal>
   );

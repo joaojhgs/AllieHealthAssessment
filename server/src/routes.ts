@@ -23,17 +23,15 @@ router.post("/users", (req: Request, res: Response) => {
 
   const user = db
     .prepare(
-      "INSERT INTO users (first_name, last_name, email) VALUES (@firstName, @lastName, @email)",
+      "INSERT INTO users (first_name, last_name, email) VALUES (@firstName, @lastName, @email) RETURNING id, first_name, last_name, email",
     )
-    .run({
+    .get({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
     });
 
-  res.json({
-    id: user.lastInsertRowid,
-  });
+  res.json(user);
 });
 
 router.post(

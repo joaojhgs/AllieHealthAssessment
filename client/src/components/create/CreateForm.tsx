@@ -1,9 +1,10 @@
 import { Alert, Box, Button, TextField } from "@mui/material";
 import useAxios from "axios-hooks";
 import { FieldValues, useForm } from "react-hook-form";
+import { IUser } from "../../interfaces";
 
 type Props = {
-  onSubmit: () => void;
+  onSubmit: (result?: IUser) => void;
 };
 
 const CreateForm = ({ onSubmit }: Props) => {
@@ -17,8 +18,7 @@ const CreateForm = ({ onSubmit }: Props) => {
   );
 
   const onFormSubmit = async (data: FieldValues) => {
-    await executePost({ data });
-    onSubmit();
+    onSubmit((await executePost({ data })).data);
   };
 
   return (
