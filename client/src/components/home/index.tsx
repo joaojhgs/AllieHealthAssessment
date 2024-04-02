@@ -9,7 +9,7 @@ import { IUser } from "../../interfaces";
 
 const Home = () => {
   const [isCreateUserOpen, setIsCreateUserOpen] = useState(false);
-  const [usersData, setUsersData] = useState<IUser[]>()
+  const [usersData, setUsersData] = useState<IUser[]>();
 
   const [{ data, loading, error }, refetch] = useAxios(
     `${process.env.REACT_APP_SERVER_BASE_URL}/users`,
@@ -19,7 +19,7 @@ const Home = () => {
     if (data) {
       setUsersData(data.users);
     }
-  }, [data])
+  }, [data]);
 
   if (loading || !usersData) {
     return (
@@ -60,7 +60,7 @@ const Home = () => {
         open={isCreateUserOpen}
         handleClose={(result: IUser) => {
           setIsCreateUserOpen(!isCreateUserOpen);
-          setUsersData(users => users ? [...users, result] : [result]);
+          setUsersData((users) => (users ? [...users, result] : [result]));
         }}
       />
     </>
