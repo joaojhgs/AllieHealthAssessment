@@ -16,7 +16,7 @@ const TableHeaderCell = (props: Record<any, any>) => (
 );
 
 type Props = {
-  users: {
+  users?: {
     id: number;
     first_name: string;
     last_name: string;
@@ -34,7 +34,7 @@ const UsersTable = ({ users }: Props) => (
         </TableRow>
       </TableHead>
       <TableBody>
-        {users.map((user) => (
+        {users?.map((user) => (
           <TableRow
             key={user.id}
             sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

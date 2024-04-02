@@ -1,19 +1,27 @@
 import { Box, Button, CircularProgress } from "@mui/material";
 import useAxios from "axios-hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UsersTable from "./UsersTable";
 import MessageContainer from "./MessageContainer";
 import CreateUserModal from "../create";
 import UploadInput from "./UploadInput";
+import { IUser } from "../../interfaces";
 
 const Home = () => {
   const [isCreateUserOpen, setIsCreateUserOpen] = useState(false);
+  const [usersData, setUsersData] = useState<IUser[]>()
 
   const [{ data, loading, error }, refetch] = useAxios(
     `${process.env.REACT_APP_SERVER_BASE_URL}/users`,
   );
 
-  if (loading) {
+  useEffect(() => {
+    if (data) {
+      setUsersData(data.users);
+    }
+  }, [data])
+
+  if (loading || !usersData) {
     return (
       <MessageContainer>
         <CircularProgress />
@@ -47,12 +55,12 @@ const Home = () => {
           Create User
         </Button>
       </Box>
-      <UsersTable users={data.users} />
+      <UsersTable users={usersData} />
       <CreateUserModal
         open={isCreateUserOpen}
-        handleClose={() => {
+        handleClose={(result: IUser) => {
           setIsCreateUserOpen(!isCreateUserOpen);
-          refetch();
+          setUsersData(users => users ? [...users, result] : [result]);
         }}
       />
     </>
