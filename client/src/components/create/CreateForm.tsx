@@ -1,6 +1,7 @@
 import { Alert, Box, Button, TextField } from "@mui/material";
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import useAxios from "axios-hooks";
-import { FieldValues, useForm } from "react-hook-form";
+import { Controller, FieldValues, useForm } from "react-hook-form";
 import { IUser } from "../../interfaces";
 
 type Props = {
@@ -8,7 +9,7 @@ type Props = {
 };
 
 const CreateForm = ({ onSubmit }: Props) => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, control } = useForm();
   const [{ loading, error }, executePost] = useAxios(
     {
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/users`,
@@ -39,14 +40,26 @@ const CreateForm = ({ onSubmit }: Props) => {
           <TextField
             label="First Name"
             variant="outlined"
-            {...register("firstName")}
+            {...register("firstName", { required: true })}
           />
           <TextField
             label="Last Name"
             variant="outlined"
-            {...register("lastName")}
+            {...register("lastName", { required: true })}
           />
-          <TextField label="Email" variant="outlined" {...register("email")} />
+          <TextField label="Email" variant="outlined" {...register("email", { required: true })} />
+          <Controller
+            name="birthDate"
+            control={control}
+            render={
+                ({ field: { onChange, ...restField } }) =>
+                    <DatePicker
+                        label="Request Date"
+                        onChange={(event) => {  onChange(event); }}
+                        {...restField}
+                    />
+              }
+          />
           <Button variant="contained" type="submit" disabled={loading}>
             Create User
           </Button>

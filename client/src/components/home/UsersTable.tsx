@@ -5,6 +5,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { IUser } from "../../interfaces";
 
 const TableHeaderCell = (props: Record<any, any>) => (
   <TableCell
@@ -16,12 +17,7 @@ const TableHeaderCell = (props: Record<any, any>) => (
 );
 
 type Props = {
-  users?: {
-    id: number;
-    first_name: string;
-    last_name: string;
-    email: string;
-  }[];
+  users?: IUser[];
 };
 
 const UsersTable = ({ users }: Props) => (
@@ -30,6 +26,7 @@ const UsersTable = ({ users }: Props) => (
       <TableHead>
         <TableRow>
           <TableHeaderCell>Name</TableHeaderCell>
+          <TableHeaderCell>Birth date</TableHeaderCell>
           <TableHeaderCell align="right">Email</TableHeaderCell>
         </TableRow>
       </TableHead>
@@ -42,6 +39,7 @@ const UsersTable = ({ users }: Props) => (
             <TableCell component="th" scope="row">
               {`${user.first_name} ${user.last_name}`}
             </TableCell>
+            <TableCell>{user.birth_date ? new Date(user.birth_date).toDateString() : null}</TableCell>
             <TableCell align="right">{user.email}</TableCell>
           </TableRow>
         ))}
