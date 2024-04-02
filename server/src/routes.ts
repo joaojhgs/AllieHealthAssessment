@@ -7,6 +7,10 @@ const router = Router();
 
 const upload = multer({ dest: os.tmpdir() });
 
+const usersParameterMap: Record<string, string> = {
+  firstName: 'first_name', lastName: 'last_name', email: 'email', birthDate: 'birth_date'
+};
+
 router.get("/users", (req: Request, res: Response) => {
   const users = db.prepare("SELECT * FROM users").all();
 
@@ -36,6 +40,39 @@ router.post("/users", (req: Request, res: Response) => {
       email: req.body.email,
       birthDate: req.body.birthDate,
     });
+
+  res.json(user);
+});
+
+router.put("/users/:userId", (req: Request, res: Response) => {
+
+  if (
+    Object.keys(req.body).length < 1
+  ) {
+    res.sendStatus(400);
+    return;
+  }
+
+  Object.keys(req.body).forEach(key => {
+    if (!usersParameterMap[key]) {
+      res.sendStatus(400);
+      return;
+    }
+  })
+
+  let query = `UPDATE users`
+  Object.keys(req.body).forEach(key => {
+    query = query.concat(`\nSET ${usersParameterMap[key]} = @${key}`)
+  })
+  query = query.concat(`\nWHERE id = ${req.params.userId}`);
+  query = query.concat(`\nRETURNING id, first_name, last_name, email, birth_date`);
+
+
+  const user = db
+    .prepare(
+      query,
+    )
+    .get(req.body);
 
   res.json(user);
 });
