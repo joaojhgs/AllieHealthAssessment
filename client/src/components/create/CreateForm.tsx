@@ -5,7 +5,7 @@ import { Controller, FieldValues, useForm } from "react-hook-form";
 import { IUser } from "../../interfaces";
 
 type Props = {
-  onSubmit: (result: IUser) => void;
+  onSubmit: (result?: IUser) => void;
 };
 
 const CreateForm = ({ onSubmit }: Props) => {
