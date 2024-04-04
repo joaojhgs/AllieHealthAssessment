@@ -55,6 +55,7 @@ const CreateForm = ({ onSubmit }: Props) => {
           <Controller
             name="birthDate"
             control={control}
+            rules={{required: true}}
             render={({ field: { onChange, ...restField } }) => (
               <DatePicker
                 label="Request Date"
