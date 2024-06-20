@@ -16,19 +16,25 @@ router.get("/users", (req: Request, res: Response) => {
 });
 
 router.post("/users", (req: Request, res: Response) => {
-  if (!req.body.firstName || !req.body.lastName || !req.body.email) {
+  if (
+    !req.body.firstName ||
+    !req.body.lastName ||
+    !req.body.email ||
+    !req.body.birthDate
+  ) {
     res.sendStatus(400);
     return;
   }
 
   const user = db
     .prepare(
-      "INSERT INTO users (first_name, last_name, email) VALUES (@firstName, @lastName, @email) RETURNING id, first_name, last_name, email",
+      "INSERT INTO users (first_name, last_name, email, birth_date) VALUES (@firstName, @lastName, @email, @birthDate) RETURNING id, first_name, last_name, email, birth_date",
     )
     .get({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
+      birthDate: req.body.birthDate,
     });
 
   res.json(user);
